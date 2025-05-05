@@ -1,3 +1,4 @@
+import { UUID } from "../../shared/value-objects/uuid.value-object";
 import { Category } from "../category.entity";
 
 describe("Category Entity Unit Tests", () => {
@@ -6,7 +7,7 @@ describe("Category Entity Unit Tests", () => {
       let category = new Category({
         name: "Paradigma Funcional",
       });
-      expect(category.id).toBeDefined();
+      expect(category.id).toBeInstanceOf(UUID);
       expect(category.name).toBe("Paradigma Funcional");
       expect(category.description).toBeNull();
       expect(category.is_active).toBeTruthy();
@@ -16,13 +17,12 @@ describe("Category Entity Unit Tests", () => {
     test("should create a category with all properties", () => {
       const created_at = new Date();
       let category = new Category({
-        id: "123",
         name: "Paradigma Funcional",
         description: "Description",
         is_active: false,
         created_at,
       });
-      expect(category.id).toBe("123");
+      expect(category.id).toBeInstanceOf(UUID);
       expect(category.name).toBe("Paradigma Funcional");
       expect(category.description).toBe("Description");
       expect(category.is_active).toBeFalsy();
@@ -35,7 +35,7 @@ describe("Category Entity Unit Tests", () => {
       let category = Category.create({
         name: "Paradigma Funcional",
       });
-      expect(category.id).toBeDefined();
+      expect(category.id).toBeInstanceOf(UUID);
       expect(category.name).toBe("Paradigma Funcional");
       expect(category.description).toBeNull();
       expect(category.is_active).toBeTruthy();
@@ -49,11 +49,26 @@ describe("Category Entity Unit Tests", () => {
         description: "Description",
         is_active: false,
       });
-      expect(category.id).toBeDefined();
+      expect(category.id).toBeInstanceOf(UUID);
       expect(category.name).toBe("Paradigma Funcional");
       expect(category.description).toBe("Description");
       expect(category.is_active).toBeFalsy();
       expect(category.created_at).toStrictEqual(created_at);
+    });
+  });
+
+  describe("id field", () => {
+    const arrange = [{ id: null }, { id: undefined }, { id: new UUID() }];
+
+    test.each(arrange)("id = %j", ({ id }) => {
+      const category = new Category({
+        name: "Paradigma Funcional",
+        id: id as any,
+      });
+      expect(category.id).toBeInstanceOf(UUID);
+      if (id instanceof UUID) {
+        expect(category.id).toBe(id);
+      }
     });
   });
 

@@ -1,26 +1,28 @@
+import { UUID } from "../shared/value-objects/uuid.value-object";
+
 export type CategoryProps = {
-  id?: string;
+  id?: UUID;
   name: string;
   description?: string | null;
   is_active?: boolean;
   created_at?: Date;
-}
+};
 
 export type CategoryCreateCommand = {
   name: string;
   description?: string | null;
   is_active?: boolean;
-}
+};
 
 export class Category {
-  id: string;
+  id: UUID;
   name: string;
   description: string | null;
   is_active: boolean;
   created_at: Date;
 
   constructor(props: CategoryProps) {
-    this.id = props.id ?? crypto.randomUUID();
+    this.id = props.id ?? new UUID();
     this.name = props.name;
     this.description = props.description ?? null;
     this.is_active = props.is_active ?? true;
@@ -31,7 +33,7 @@ export class Category {
     return new Category(props);
   }
 
-  changeName(name: string): void { 
+  changeName(name: string): void {
     this.name = name;
   }
 
@@ -47,9 +49,9 @@ export class Category {
     this.is_active = false;
   }
 
-  toJSON(): CategoryProps {
+  toJSON() {
     return {
-      id: this.id,
+      id: this.id.id,
       name: this.name,
       description: this.description,
       is_active: this.is_active,
