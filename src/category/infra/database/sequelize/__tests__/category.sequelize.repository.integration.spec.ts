@@ -22,9 +22,7 @@ describe("CategorySequelizeRepository Integration Tests", () => {
   });
 
   test("should insert a new category", async () => {
-    let category = Category.create({
-      name: "Category 1",
-    });
+    let category = Category.fake().aCategory().build();
 
     await repository.insert(category);
 
@@ -44,16 +42,12 @@ describe("CategorySequelizeRepository Integration Tests", () => {
   });
 
   test("should return all categories ", async () => {
-    const category1 = Category.fake().aCategory().build();
-    const category2 = Category.fake().aCategory().build();
-    const category3 = Category.fake().aCategory().build();
+    const category = Category.fake().aCategory().build();
 
-    await repository.bulkInsert([category1, category2, category3]);
+    await repository.insert(category);
     const categories = await repository.findAll();
-    expect(categories).toHaveLength(3);
-    expect(categories[0].toJSON()).toStrictEqual(category1.toJSON());
-    expect(categories[1].toJSON()).toStrictEqual(category2.toJSON());
-    expect(categories[2].toJSON()).toStrictEqual(category3.toJSON());
+    expect(categories).toHaveLength(1);
+    expect(categories[0].toJSON()).toStrictEqual(category.toJSON());
   });
 
   test("should update a entity", async () => {

@@ -8,6 +8,7 @@ import {
   type CategorySearchParams,
 } from "../../../domain/category.repository";
 import type { CategoryModel } from "./category.model";
+import { CategoryModelMapper } from "./mappers/category.model.mapper";
 
 export class CategorySequelizeRepository
   implements ISearchableRepository<Category, UUID>
@@ -17,25 +18,15 @@ export class CategorySequelizeRepository
   constructor(private categoryModel: typeof CategoryModel) {}
 
   async insert(entity: Category): Promise<void> {
-    await this.categoryModel.create({
-      id: entity.id.id,
-      name: entity.name,
-      description: entity.description,
-      is_active: entity.is_active,
-      created_at: entity.created_at,
-    });
+    const model = CategoryModelMapper.toModel(entity);
+    await this.categoryModel.create(model.toJSON());
   }
 
   async bulkInsert(entities: Category[]): Promise<void> {
-    await this.categoryModel.bulkCreate(
-      entities.map((entity) => ({
-        id: entity.id.id,
-        name: entity.name,
-        description: entity.description,
-        is_active: entity.is_active,
-        created_at: entity.created_at,
-      }))
+    const models = entities.map((entity) =>
+      CategoryModelMapper.toModel(entity)
     );
+    await this.categoryModel.bulkCreate(models);
   }
 
   async update(entity: Category): Promise<void> {
@@ -45,16 +36,11 @@ export class CategorySequelizeRepository
       throw new NotFoundError(category_id, this.getEntity());
     }
 
-    await this.categoryModel.update(
-      {
-        id: entity.id.id,
-        name: entity.name,
-        description: entity.description,
-        is_active: entity.is_active,
-        created_at: entity.created_at,
-      },
-      { where: { id: category_id } }
-    );
+    const modelToUpdate = CategoryModelMapper.toModel(entity);
+
+    await this.categoryModel.update(modelToUpdate.toJSON(), {
+      where: { id: category_id },
+    });
   }
 
   async delete(category_id: UUID): Promise<void> {
@@ -71,25 +57,13 @@ export class CategorySequelizeRepository
 
     if (!model) return null;
 
-    return new Category({
-      id: new UUID(model.id),
-      name: model.name,
-      description: model.description,
-      is_active: model.is_active,
-      created_at: model.created_at,
-    });
+    return model ? CategoryModelMapper.toEntity(model) : null;
   }
 
   async findAll(): Promise<Category[]> {
     const models = await this.categoryModel.findAll();
     return models.map((model) => {
-      return new Category({
-        id: new UUID(model.id),
-        name: model.name,
-        description: model.description,
-        is_active: model.is_active,
-        created_at: model.created_at,
-      });
+      return CategoryModelMapper.toEntity(model);
     });
   }
 
