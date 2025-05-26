@@ -18,34 +18,34 @@ export class CategorySequelizeRepository
   constructor(private categoryModel: typeof CategoryModel) {}
 
   async insert(entity: Category): Promise<void> {
-    const model = CategoryModelMapper.toModel(entity);
-    await this.categoryModel.create(model.toJSON());
+    const modelProps = CategoryModelMapper.toModel(entity);
+    await this.categoryModel.create(modelProps.toJSON());
   }
 
   async bulkInsert(entities: Category[]): Promise<void> {
-    const models = entities.map((entity) =>
-      CategoryModelMapper.toModel(entity)
+    const modelsProps = entities.map((entity) =>
+      CategoryModelMapper.toModel(entity).toJSON()
     );
-    await this.categoryModel.bulkCreate(models);
+    await this.categoryModel.bulkCreate(modelsProps);
   }
 
   async update(entity: Category): Promise<void> {
     const category_id = entity.id.id;
-    const model = await this.findById(new UUID(category_id));
-    if (!model) {
+    const modelProps = await this.findById(new UUID(category_id));
+    if (!modelProps) {
       throw new NotFoundError(category_id, this.getEntity());
     }
 
-    const modelToUpdate = CategoryModelMapper.toModel(entity);
+    const modelPropsToUpdate = CategoryModelMapper.toModel(entity);
 
-    await this.categoryModel.update(modelToUpdate.toJSON(), {
+    await this.categoryModel.update(modelPropsToUpdate.toJSON(), {
       where: { id: category_id },
     });
   }
 
   async delete(category_id: UUID): Promise<void> {
-    const model = await this.findById(category_id);
-    if (!model) {
+    const modelProps = await this.findById(category_id);
+    if (!modelProps) {
       throw new NotFoundError(category_id, this.getEntity());
     }
 
@@ -78,7 +78,7 @@ export class CategorySequelizeRepository
         },
         ...(props.sort && this.sortableFields.includes(props.sort)
           ? { order: [[props.sort, props.sort_dir]] }
-          : { order: [["created_ate", "desc"]] }),
+          : { order: [["created_at", "desc"]] }),
         offset,
         limit,
       }),
@@ -86,13 +86,7 @@ export class CategorySequelizeRepository
 
     return new CategorySearchResult({
       items: models.map((model) => {
-        return new Category({
-          id: new UUID(model.id),
-          name: model.name,
-          description: model.description,
-          is_active: model.is_active,
-          created_at: model.created_at,
-        });
+        return CategoryModelMapper.toEntity(model);
       }),
       current_page: props.page,
       per_page: props.per_page,
