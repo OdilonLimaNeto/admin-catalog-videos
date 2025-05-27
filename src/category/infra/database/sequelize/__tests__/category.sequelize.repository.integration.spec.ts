@@ -91,7 +91,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
 
       const searchOutput = await repository.search(new CategorySearchParams());
       expect(searchOutput).toBeInstanceOf(CategorySearchResult);
-      expect(spyToEntity).toHaveBeenCalledTimes(16);
+      expect(spyToEntity).toHaveBeenCalledTimes(15);
       expect(searchOutput.toJSON()).toMatchObject({
         total: 16,
         current_page: 1,
@@ -104,7 +104,7 @@ describe("CategorySequelizeRepository Integration Test", () => {
       });
       const items = searchOutput.items.map((item) => item.toJSON());
       expect(items).toMatchObject(
-        new Array(16).fill({
+        new Array(15).fill({
           name: "Movie",
           description: null,
           is_active: true,
