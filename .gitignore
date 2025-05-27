@@ -1,3 +1,5 @@
 .history/
+.clinerules
 node_modules/
 anotations.md
+memory-bank

@@ -76,14 +76,14 @@ export class CategorySequelizeRepository
     const { rows: models, count } = await this.categoryModel.findAndCountAll({
       ...(props.filter && {
         where: {
-          name: { [Op.like]: `%${props.filter}` },
+          name: { [Op.like]: `%${props.filter}%` },
         },
-        ...(props.sort && this.sortableFields.includes(props.sort)
-          ? { order: [[props.sort, props.sort_dir]] }
-          : { order: [["created_at", "desc"]] }),
-        offset,
-        limit,
       }),
+      ...(props.sort && this.sortableFields.includes(props.sort)
+        ? { order: [[props.sort, props.sort_dir]] }
+        : { order: [["created_at", "desc"]] }),
+      offset,
+      limit,
     });
 
     return new CategorySearchResult({

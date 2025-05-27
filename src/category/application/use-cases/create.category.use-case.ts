@@ -1,6 +1,10 @@
-import type { IUseCase } from "../../shared/application/user-case.interface";
-import { Category } from "../domain/category.entity";
-import type { ICategoryRepository } from "../domain/category.repository";
+import type { IUseCase } from "../../../shared/application/user-case.interface";
+import { Category } from "../../domain/category.entity";
+import type { ICategoryRepository } from "../../domain/category.repository";
+import {
+  CategoryOutputMapper,
+  type CategoryOutput,
+} from "./common/category.output";
 
 export class CreateCategoryUseCase
   implements IUseCase<CreateCategoryInput, CreateCategoryOutput>
@@ -11,7 +15,7 @@ export class CreateCategoryUseCase
 
     await this.repository.insert(category);
 
-    return category.toJSON();
+    return CategoryOutputMapper.toOutput(category);
   }
 }
 
@@ -21,10 +25,4 @@ export type CreateCategoryInput = {
   is_active?: boolean;
 };
 
-export type CreateCategoryOutput = {
-  id: string;
-  name: string;
-  description?: string | null;
-  is_active: boolean;
-  created_at: Date;
-};
+export type CreateCategoryOutput = CategoryOutput;

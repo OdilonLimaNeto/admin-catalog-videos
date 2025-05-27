@@ -1,9 +1,9 @@
-import { NotFoundError } from "../../../../shared/domain/errors/not-found.error";
-import { setupSequelize } from "../../../../shared/infra/testing/helpers";
-import { UUID } from "../../../../shared/value-objects/uuid.value-object";
-import { Category } from "../../../domain/category.entity";
-import { CategoryModel } from "../../../infra/database/sequelize/category.model";
-import { CategorySequelizeRepository } from "../../../infra/database/sequelize/category.sequelize.repository";
+import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
+import { setupSequelize } from "../../../../../shared/infra/testing/helpers";
+import { UUID } from "../../../../../shared/value-objects/uuid.value-object";
+import { Category } from "../../../../domain/category.entity";
+import { CategoryModel } from "../../../../infra/database/sequelize/category.model";
+import { CategorySequelizeRepository } from "../../../../infra/database/sequelize/category.sequelize.repository";
 import { UpdateCategoryUseCase } from "../../update.category.use-case";
 
 describe("UpdateCategoryUseCase Integration Tests", () => {
