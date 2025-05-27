@@ -4,7 +4,8 @@
   "description": "A platform for managing and delivering online courses",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "tsc:check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
