@@ -1,0 +1,51 @@
+import type { IUseCase } from "../../shared/application/user-case.interface";
+import { NotFoundError } from "../../shared/domain/errors/not-found.error";
+import { UUID } from "../../shared/value-objects/uuid.value-object";
+import { Category } from "../domain/category.entity";
+import type { ICategoryRepository } from "../domain/category.repository";
+
+export class UpdateCategoryUseCase
+  implements IUseCase<UpdateCategoryInput, UpdateCategoryOutput>
+{
+  constructor(private readonly repository: ICategoryRepository) {}
+
+  async execute(input: UpdateCategoryInput): Promise<UpdateCategoryOutput> {
+    const uuid = new UUID(input.id);
+
+    const category = await this.repository.findById(uuid);
+
+    if (!category) throw new NotFoundError(uuid, Category);
+
+    input.name && category.changeName(input.name);
+
+    if (input.description !== undefined) {
+      category.changeDescription(input.description);
+    }
+    if (input.is_active === true) {
+      category.activate();
+    }
+
+    if (input.is_active === false) {
+      category.deactivate();
+    }
+
+    await this.repository.update(category);
+
+    return category.toJSON();
+  }
+}
+
+export type UpdateCategoryInput = {
+  id: string;
+  name?: string;
+  description?: string;
+  is_active?: boolean;
+};
+
+export type UpdateCategoryOutput = {
+  id: string;
+  name: string;
+  description: string;
+  is_active: boolean;
+  created_at: Date;
+};

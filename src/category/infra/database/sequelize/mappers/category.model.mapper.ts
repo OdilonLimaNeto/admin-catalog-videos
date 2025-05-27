@@ -18,6 +18,7 @@ export class CategoryModelMapper {
       id: new UUID(model.id),
       name: model.name,
       description: model.description,
+      is_active: model.is_active,
       created_at: model.created_at,
     });
 

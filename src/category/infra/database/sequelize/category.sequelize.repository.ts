@@ -49,7 +49,9 @@ export class CategorySequelizeRepository
       throw new NotFoundError(category_id, this.getEntity());
     }
 
-    await this.categoryModel.destroy({ where: { id: category_id.id } });
+    await this.categoryModel.destroy({
+      where: { id: category_id.id },
+    });
   }
 
   async findById(entity_id: UUID): Promise<Category | null> {

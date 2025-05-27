@@ -28,11 +28,11 @@ export class Category extends Entity {
 
   constructor(props: CategoryProps) {
     super();
-    this.id = props.id ?? new UUID();
+    this.id = props.id || new UUID();
     this.name = props.name;
-    this.description = props.description ?? null;
-    this.is_active = props.is_active ?? true;
-    this.created_at = props.created_at ?? new Date();
+    this.description = props.description || null;
+    this.is_active = props.is_active === undefined ? true : props.is_active;
+    this.created_at = props.created_at || new Date();
   }
 
   static create(props: CategoryCreateCommand): Category {
