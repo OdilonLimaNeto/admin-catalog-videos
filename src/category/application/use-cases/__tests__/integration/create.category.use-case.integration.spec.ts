@@ -1,3 +1,4 @@
+import { EntityValidationError } from "../../../../../shared/domain/validators/validation-error";
 import { setupSequelize } from "../../../../../shared/infra/testing/helpers";
 import { UUID } from "../../../../../shared/value-objects/uuid.value-object";
 import { CategoryModel } from "../../../../infra/database/sequelize/category.model";
@@ -13,6 +14,15 @@ describe("CreateCategoryUseCase Integration Tests", () => {
   beforeEach(() => {
     repository = new CategorySequelizeRepository(CategoryModel);
     useCase = new CreateCategoryUseCase(repository);
+  });
+
+  test("should throw an error when category is not valid", async () => {
+    const input = { name: "t".repeat(256) };
+    await expect(() => useCase.execute(input)).rejects.toThrow(
+      new EntityValidationError([
+        { name: ["Name must be between 3 and 255 characters"] },
+      ])
+    );
   });
 
   test("should create a category", async () => {

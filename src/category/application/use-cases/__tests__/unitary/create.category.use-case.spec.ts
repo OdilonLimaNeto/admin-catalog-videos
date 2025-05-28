@@ -1,3 +1,4 @@
+import { EntityValidationError } from "../../../../../shared/domain/validators/validation-error";
 import { CategoryInMemoryRepository } from "../../../../infra/database/in-memory/category-in-memory.repository";
 import { CreateCategoryUseCase } from "../../create.category.use-case";
 
@@ -8,6 +9,15 @@ describe("CreateCategoryUseCase Unit Tests", () => {
   beforeEach(() => {
     repository = new CategoryInMemoryRepository();
     useCase = new CreateCategoryUseCase(repository);
+  });
+
+  test("should throw an error when category is not valid", async () => {
+    const input = { name: "t".repeat(256) };
+    await expect(() => useCase.execute(input)).rejects.toThrow(
+      new EntityValidationError([
+        { name: ["Name must be between 3 and 255 characters"] },
+      ])
+    );
   });
 
   test("should create a category", async () => {

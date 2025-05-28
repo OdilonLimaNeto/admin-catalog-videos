@@ -9,8 +9,10 @@ describe("CategoryModelMapper Integration Tests", () => {
   setupSequelize({ models: [CategoryModel] });
 
   test("should throws error when category is invalid", async () => {
+    expect.assertions(2);
     const model = CategoryModel.build({
       id: "b6935a7c-d7c6-4b11-963e-29a6488f518b",
+      name: "a".repeat(256),
     });
 
     try {
@@ -18,13 +20,11 @@ describe("CategoryModelMapper Integration Tests", () => {
       fail("The Category is valid, but it needs throw a EntityValidationError");
     } catch (error) {
       expect(error).toBeInstanceOf(EntityValidationError);
-      expect((error as EntityValidationError).errors).toMatchObject({
-        name: [
-          "name should not be empty",
-          "name must be a string",
-          "name must be shorter than or equal to 255 characters",
-        ],
-      });
+      expect((error as EntityValidationError).errors).toMatchObject([
+        {
+          name: ["name must be shorter than or equal to 255 characters"],
+        },
+      ]);
     }
   });
 

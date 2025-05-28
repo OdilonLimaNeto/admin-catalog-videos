@@ -1,3 +1,4 @@
+import { EntityValidationError } from "../../../../../shared/domain/validators/validation-error";
 import { UUID } from "../../../../../shared/value-objects/uuid.value-object";
 import { Category } from "../../../../domain/category.entity";
 import { CategoryModel } from "../category.model";
@@ -14,7 +15,7 @@ export class CategoryModelMapper {
   }
 
   static toEntity(model: CategoryModel): Category {
-    const entity = new Category({
+    const category = new Category({
       id: new UUID(model.id),
       name: model.name,
       description: model.description,
@@ -22,7 +23,10 @@ export class CategoryModelMapper {
       created_at: model.created_at,
     });
 
-    Category.validate(entity);
-    return entity;
+    category.validate();
+    if (category.notification.hasErrors()) {
+      throw new EntityValidationError(category.notification.toJSON());
+    }
+    return category;
   }
 }

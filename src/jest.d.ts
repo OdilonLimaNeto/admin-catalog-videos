@@ -3,7 +3,10 @@ import type { FieldErrors } from "./shared/domain/validators/interface/validator
 declare global {
   namespace jest {
     interface Matchers<R> {
-      containsErrorMessages: (expected: FieldErrors) => R;
+      notificationContainsErrorMessages: (
+        expected: Array<string | { [key: string]: string[] }>
+      ) => R;
+      toBeValueObject: (expected: ValueObject) => R;
     }
   }
 }

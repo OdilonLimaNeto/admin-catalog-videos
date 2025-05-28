@@ -1,4 +1,5 @@
 import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
+import { EntityValidationError } from "../../../../../shared/domain/validators/validation-error";
 import {
   InvalidUUIDError,
   UUID,
@@ -14,6 +15,17 @@ describe("UpdateCategoryUseCase Unit Tests", () => {
   beforeEach(() => {
     repository = new CategoryInMemoryRepository();
     useCase = new UpdateCategoryUseCase(repository);
+  });
+
+  test("should throw an error when category is not valid", async () => {
+    const input = new Category({ name: "t".repeat(256) });
+    await repository.insert(input);
+    await expect(() =>
+      useCase.execute({
+        id: input.id.id,
+        name: "t".repeat(256),
+      })
+    ).rejects.toThrow("Entity Validation Error");
   });
 
   test("should throws error when entity not found", async () => {

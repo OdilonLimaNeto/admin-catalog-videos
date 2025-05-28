@@ -1,22 +1,19 @@
-import type { IValidatorFields } from "./interface/validator-fields.interface";
 import { validateSync } from "class-validator";
+import type { IValidatorFields } from "./interface/validator-fields.interface";
+import type { Notification } from "./patterns/validation.pattern";
 
-export abstract class ClassValidatorFields<PropsValidated>
-  implements IValidatorFields<PropsValidated>
-{
-  errors: Record<string, string[]> | null = null;
-  validateDate: PropsValidated | null = null;
-
-  validate(data: any): boolean {
-    const errors = validateSync(data);
-    if (errors.length) {
-      this.errors = {};
+export abstract class ClassValidatorFields implements IValidatorFields {
+  validate(notification: Notification, data: any, fields?: string[]): boolean {
+    const errors = validateSync(data, {
+      groups: fields,
+    });
+    if (errors.length > 0) {
       for (const error of errors) {
         const field = error.property;
-        this.errors[field] = Object.values(error.constraints!);
+        Object.values(error.constraints!).forEach((message: string) => {
+          notification.addError(message, field);
+        });
       }
-    } else {
-      this.validateDate = data;
     }
     return !errors.length;
   }
