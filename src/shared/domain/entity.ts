@@ -1,5 +1,5 @@
 import { Notification } from "./validators/patterns/validation.pattern";
-import type { ValueObject } from "./value-object";
+import type { ValueObject } from "./value.object";
 
 export abstract class Entity {
   notification: Notification = new Notification();

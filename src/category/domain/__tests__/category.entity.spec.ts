@@ -1,4 +1,4 @@
-import { UUID } from "../../../shared/value-objects/uuid.value-object";
+import { UUID } from "../../../shared/value.objects/uuid.value.object";
 import { Category } from "../category.entity";
 
 describe("Category Without Validator Unit Tests", () => {

@@ -1,7 +1,7 @@
 import { Entity } from "../../shared/domain/entity";
-import type { ValueObject } from "../../shared/domain/value-object";
-import { UUID } from "../../shared/value-objects/uuid.value-object";
-import { CategoryFakeBuilder } from "./category-fake.builder";
+import type { ValueObject } from "../../shared/domain/value.object";
+import { UUID } from "../../shared/value.objects/uuid.value.object";
+import { CategoryFakeBuilder } from "./category.fake.builder";
 import { CategoryValidatorFactory } from "./category.validator";
 
 export type CategoryProps = {

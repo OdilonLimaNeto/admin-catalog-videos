@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
-import { NotFoundError } from "../../../../shared/domain/errors/not-found.error";
+import { NotFoundError } from "../../../../shared/domain/errors/not.found.error";
 import type { ISearchableRepository } from "../../../../shared/domain/repository/repository.interface";
-import { UUID } from "../../../../shared/value-objects/uuid.value-object";
+import { UUID } from "../../../../shared/value.objects/uuid.value.object";
 import { Category } from "../../../domain/category.entity";
 import {
   CategorySearchResult,

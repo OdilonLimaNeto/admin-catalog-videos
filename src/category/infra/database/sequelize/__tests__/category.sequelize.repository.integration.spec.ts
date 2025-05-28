@@ -1,8 +1,8 @@
 import { CategoryModel } from "../category.model";
 import { CategorySequelizeRepository } from "../category.sequelize.repository";
 import { Category } from "../../../../domain/category.entity";
-import { UUID } from "../../../../../shared/value-objects/uuid.value-object";
-import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
+import { UUID } from "../../../../../shared/value.objects/uuid.value.object";
+import { NotFoundError } from "../../../../../shared/domain/errors/not.found.error";
 import { CategoryModelMapper } from "../mappers/category.model.mapper";
 import {
   CategorySearchParams,

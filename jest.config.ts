@@ -25,7 +25,7 @@ const config: Config = {
   collectCoverageFrom: ["**/*.(ts|tsx)"],
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: "../coverage",
 
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
@@ -143,7 +143,7 @@ const config: Config = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ["./shared/infra/testing/expect-helpers.ts"],
+  setupFilesAfterEnv: ["./shared/infra/testing/expect.helpers.ts"],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,

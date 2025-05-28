@@ -1,6 +1,6 @@
 import { MaxLength } from "class-validator";
 import type { Category } from "./category.entity";
-import { ClassValidatorFields } from "../../shared/domain/validators/class-validator-fields";
+import { ClassValidatorFields } from "../../shared/domain/validators/class.validator.fields";
 import type { Notification } from "../../shared/domain/validators/patterns/validation.pattern";
 
 export class CategoryRules {
