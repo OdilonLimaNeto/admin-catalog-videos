@@ -14,6 +14,8 @@ type DATABASE_SCHEMA_TYPE = {
   DB_AUTO_LOAD_MODELS: boolean;
 };
 
+export type CONFIG_DATABASE_SCHEMA_TYPE = DATABASE_SCHEMA_TYPE;
+
 export const CONFIG_DATABASE_SCHEMA: Joi.StrictSchemaMap<DATABASE_SCHEMA_TYPE> =
   {
     DB_VENDOR: Joi.string().required().valid('mysql', 'sqlite'),
