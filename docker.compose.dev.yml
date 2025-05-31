@@ -14,8 +14,9 @@ services:
       MYSQL_DATABASE: microservice_videos
       MYSQL_ROOT_PASSWORD: root
 
-    tmpfs:
-      - /var/lib/mysql
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql:delegated
+    # Using tmpfs for MySQL data storage
 
     security_opt:
       - seccomp:unconfined
