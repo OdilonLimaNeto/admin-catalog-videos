@@ -6,6 +6,10 @@ import {
   Patch,
   Param,
   Inject,
+  ParseUUIDPipe,
+  HttpCode,
+  Delete,
+  HttpStatus,
 } from '@nestjs/common';
 import { type CreateCategoryDTO } from './dto/create.category.dto';
 import { UpdateCategoryDTO } from './dto/update.category.dto';
@@ -36,29 +40,35 @@ export class CategoryController {
   private listCategoryUseCase: ListCategoryUseCase;
 
   @Post()
-  async create(@Body() data: CreateCategoryDTO) {
+  async create(@Body() data: CreateCategoryDTO): Promise<CategoryPresenter> {
     const output = await this.createCategoryUseCase.execute(data);
     return CategoryController.serialize(output);
   }
 
+  @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
     @Body() data: UpdateCategoryDTO,
+  ): Promise<CategoryPresenter> {
+    const output = await this.updateCategoryUseCase.execute({ ...data, id });
+    return CategoryController.serialize(output);
+  }
+
+  @Get(':id')
+  async findOne(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 }))
+    id: string,
+  ): Promise<CategoryPresenter> {
+    const output = await this.getCategoryUseCase.execute({ id });
+    return CategoryController.serialize(output);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':id')
+  async remove(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
   ): Promise<void> {
-    await this.updateCategoryUseCase.execute({ id, ...data });
-  }
-
-  @Get()
-  async findAll(): Promise<void> {
-    await this.listCategoryUseCase.execute();
-  }
-
-  async findOne(@Param('id') id: string): Promise<void> {
-    await this.getCategoryUseCase.execute(id);
-  }
-
-  async remove(@Param('id') id: string): Promise<void> {
-    await this.deleteCategoryUseCase.execute(id);
+    await this.deleteCategoryUseCase.execute({ id });
   }
 
   static serialize(output: CategoryOutput): CategoryPresenter {
