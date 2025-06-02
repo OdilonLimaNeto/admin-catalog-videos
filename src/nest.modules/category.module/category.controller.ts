@@ -18,7 +18,6 @@ import { UpdateCategoryUseCase } from '@core/category/application/use.cases/upda
 import { DeleteCategoryUseCase } from '@core/category/application/use.cases/delete.category/delete.category.use.case';
 import { GetCategoryUseCase } from '@core/category/application/use.cases/get.category/get.category.use.case';
 import { ListCategoryUseCase } from '@core/category/application/use.cases/list.category/list.category.use.case';
-import type { Category } from '@core/category/domain/category.entity';
 import { CategoryPresenter } from './presenters/category.presenter';
 import type { CategoryOutput } from '@core/category/application/use.cases/common/category.output';
 
