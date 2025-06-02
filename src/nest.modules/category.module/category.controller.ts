@@ -10,6 +10,7 @@ import {
   HttpCode,
   Delete,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { type CreateCategoryDTO } from './dto/create.category.dto';
 import { UpdateCategoryDTO } from './dto/update.category.dto';
@@ -17,9 +18,16 @@ import { CreateCategoryUseCase } from '@core/category/application/use.cases/crea
 import { UpdateCategoryUseCase } from '@core/category/application/use.cases/update.category/update.category.use.case';
 import { DeleteCategoryUseCase } from '@core/category/application/use.cases/delete.category/delete.category.use.case';
 import { GetCategoryUseCase } from '@core/category/application/use.cases/get.category/get.category.use.case';
-import { ListCategoryUseCase } from '@core/category/application/use.cases/list.category/list.category.use.case';
-import { CategoryPresenter } from './presenters/category.presenter';
+import {
+  ListCategoryUseCase,
+  type ListCategoryOutput,
+} from '@core/category/application/use.cases/list.category/list.category.use.case';
+import {
+  CategoryCollectionPresenter,
+  CategoryPresenter,
+} from './presenters/category.presenter';
 import type { CategoryOutput } from '@core/category/application/use.cases/common/category.output';
+import type { SearchDategoryDTO } from './dto/search.category.dto';
 
 @Controller('category')
 export class CategoryController {
@@ -42,6 +50,12 @@ export class CategoryController {
   async create(@Body() data: CreateCategoryDTO): Promise<CategoryPresenter> {
     const output = await this.createCategoryUseCase.execute(data);
     return CategoryController.serialize(output);
+  }
+
+  @Get()
+  async search(@Query() data: SearchDategoryDTO) {
+    const output = await this.listCategoryUseCase.execute(data);
+    return CategoryController.serializeCollection(output);
   }
 
   @Patch(':id')
@@ -72,5 +86,11 @@ export class CategoryController {
 
   static serialize(output: CategoryOutput): CategoryPresenter {
     return new CategoryPresenter(output);
+  }
+
+  static serializeCollection(
+    output: ListCategoryOutput,
+  ): CategoryCollectionPresenter {
+    return new CategoryCollectionPresenter(output);
   }
 }

@@ -1,5 +1,7 @@
 import type { CategoryOutput } from '@core/category/application/use.cases/common/category.output';
+import type { ListCategoryOutput } from '@core/category/application/use.cases/list.category/list.category.use.case';
 import { Transform } from 'class-transformer';
+import { CollectionPresenter } from 'src/nest.modules/shared.module/presenters/collection.presenter';
 
 export class CategoryPresenter {
   id: string;
@@ -15,5 +17,15 @@ export class CategoryPresenter {
     this.description = output.description;
     this.is_active = output.is_active;
     this.created_at = output.created_at;
+  }
+}
+
+export class CategoryCollectionPresenter extends CollectionPresenter {
+  data: CategoryPresenter[];
+
+  constructor(output: ListCategoryOutput) {
+    const { items, ...pagination } = output;
+    super(pagination);
+    this.data = items.map((item) => new CategoryPresenter(item));
   }
 }
