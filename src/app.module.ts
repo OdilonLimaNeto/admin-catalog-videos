@@ -1,13 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { CategoryModule } from './category/category.module';
-import { DatabaseModule } from './database/database.module';
-import { ConfigurationModule } from './configuration/configuration.module';
+import { CategoryModule } from './nest.modules/category.module/category.module';
+import { DatabaseModule } from './nest.modules/database.module/database.module';
+import { ConfigurationModule } from './nest.modules/configuration.module/configuration.module';
 
 @Module({
   imports: [ConfigurationModule.forRoot(), DatabaseModule, CategoryModule],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

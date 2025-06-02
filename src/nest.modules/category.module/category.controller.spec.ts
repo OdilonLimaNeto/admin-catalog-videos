@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryController } from './category.controller';
 import { CategoryModule } from './category.module';
-import { DatabaseModule } from 'src/database/database.module';
-import { ConfigurationModule } from 'src/configuration/configuration.module';
+import { DatabaseModule } from 'src/nest.modules/database.module/database.module';
+import { ConfigurationModule } from 'src/nest.modules/configuration.module/configuration.module';
 
 describe('CategoryController', () => {
   let controller: CategoryController;

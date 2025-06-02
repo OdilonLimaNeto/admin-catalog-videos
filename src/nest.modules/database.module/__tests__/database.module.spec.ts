@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { DatabaseModule } from '../database.module';
 import { getConnectionToken } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
-import { ConfigurationModule } from 'src/configuration/configuration.module';
+import { ConfigurationModule } from 'src/nest.modules/configuration.module/configuration.module';
 
 describe('DatabaseModule Unit Tests', () => {
   describe('sqlite connection', () => {
