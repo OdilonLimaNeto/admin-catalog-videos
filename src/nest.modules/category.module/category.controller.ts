@@ -15,9 +15,7 @@ import { CategorySequelizeRepository } from '@core/category/infra/database/seque
 export class CategoryController {
   constructor(
     private readonly categoryRepository: CategorySequelizeRepository,
-  ) {
-    console.log(categoryRepository);
-  }
+  ) {}
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {}
