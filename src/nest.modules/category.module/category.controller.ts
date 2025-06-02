@@ -5,33 +5,63 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  Inject,
 } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create.category.dto';
-import { UpdateCategoryDto } from './dto/update.category.dto';
-import { CategorySequelizeRepository } from '@core/category/infra/database/sequelize/category.sequelize.repository';
+import { type CreateCategoryDTO } from './dto/create.category.dto';
+import { UpdateCategoryDTO } from './dto/update.category.dto';
+import { CreateCategoryUseCase } from '@core/category/application/use.cases/create.category/create.category.use.case';
+import { UpdateCategoryUseCase } from '@core/category/application/use.cases/update.category/update.category.use.case';
+import { DeleteCategoryUseCase } from '@core/category/application/use.cases/delete.category/delete.category.use.case';
+import { GetCategoryUseCase } from '@core/category/application/use.cases/get.category/get.category.use.case';
+import { ListCategoryUseCase } from '@core/category/application/use.cases/list.category/list.category.use.case';
+import type { Category } from '@core/category/domain/category.entity';
+import { CategoryPresenter } from './presenters/category.presenter';
+import type { CategoryOutput } from '@core/category/application/use.cases/common/category.output';
 
 @Controller('category')
 export class CategoryController {
-  constructor(
-    private readonly categoryRepository: CategorySequelizeRepository,
-  ) {}
+  @Inject(CreateCategoryUseCase)
+  private createCategoryUseCase: CreateCategoryUseCase;
+
+  @Inject(UpdateCategoryUseCase)
+  private updateCategoryUseCase: UpdateCategoryUseCase;
+
+  @Inject(DeleteCategoryUseCase)
+  private deleteCategoryUseCase: DeleteCategoryUseCase;
+
+  @Inject(GetCategoryUseCase)
+  private getCategoryUseCase: GetCategoryUseCase;
+
+  @Inject(ListCategoryUseCase)
+  private listCategoryUseCase: ListCategoryUseCase;
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {}
+  async create(@Body() data: CreateCategoryDTO) {
+    const output = await this.createCategoryUseCase.execute(data);
+    return CategoryController.serialize(output);
+  }
+
+  async update(
+    @Param('id') id: string,
+    @Body() data: UpdateCategoryDTO,
+  ): Promise<void> {
+    await this.updateCategoryUseCase.execute({ id, ...data });
+  }
 
   @Get()
-  findAll() {}
+  async findAll(): Promise<void> {
+    await this.listCategoryUseCase.execute();
+  }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {}
+  async findOne(@Param('id') id: string): Promise<void> {
+    await this.getCategoryUseCase.execute(id);
+  }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto,
-  ) {}
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.deleteCategoryUseCase.execute(id);
+  }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {}
+  static serialize(output: CategoryOutput): CategoryPresenter {
+    return new CategoryPresenter(output);
+  }
 }

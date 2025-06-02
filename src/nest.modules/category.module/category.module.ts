@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CategoryController } from './category.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CategoryModel } from '@core/category/infra/database/sequelize/category.model';
-import { CATEGORY_PROVIDERS } from './category.providers';
+import { CATEGORY_PROVIDERS } from './providers/category.providers';
 
 @Module({
   imports: [SequelizeModule.forFeature([CategoryModel])],
