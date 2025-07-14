@@ -27,7 +27,7 @@ import {
   CategoryPresenter,
 } from './presenters/category.presenter';
 import type { CategoryOutput } from '@core/category/application/use.cases/common/category.output';
-import type { SearchDategoryDTO } from './dto/search.category.dto';
+import type { SearchCategoryDTO } from './dto/search.category.dto';
 
 @Controller('category')
 export class CategoryController {
@@ -53,7 +53,7 @@ export class CategoryController {
   }
 
   @Get()
-  async search(@Query() data: SearchDategoryDTO) {
+  async search(@Query() data: SearchCategoryDTO) {
     const output = await this.listCategoryUseCase.execute(data);
     return CategoryController.serializeCollection(output);
   }

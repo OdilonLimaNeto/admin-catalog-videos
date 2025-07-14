@@ -1,7 +1,7 @@
 import type { ListCategoryInput } from '@core/category/application/use.cases/list.category/list.category.use.case';
 import type { SortDirection } from '@core/shared/domain/repository/search.params';
 
-export class SearchDategoryDTO implements ListCategoryInput {
+export class SearchCategoryDTO implements ListCategoryInput {
   page?: number;
   per_page?: number;
   sort?: string;
